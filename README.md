@@ -59,5 +59,7 @@ This is the project files for class CEE263N at UC Berkeley.
  * Corp the region that interested in.
 ## Project 2: Dataframe calculation and Eigen-decomposition
 * Speed calculation:azimuth    
+The azimuth is 0 to 180 if heading north, and -180 to 0 if heading south. Speed calculation is complicated in its flow control rather than the algorithm. Therefore, details would not be explained in the README file.   
+To calculate the azimuth, there is a nice package in python using the following sample code:
 
 * Eigen-decomposition   
