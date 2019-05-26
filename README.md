@@ -1,5 +1,5 @@
 # Scalable-Spatial-Analysis
-This is the project files for class CEE263N at UC Berkeley.
+This is the project files for class at UC Berkeley. It consists the applications of machine learning algorithms in the realm of Transportation, including Principle Component Analysis (PCA), Clustering algorithms, Ramdom Forrest and Boosting. The projects deal with several pretigious datasets like NYC Yellow Taxi datasets, Didi Trajectory Datasets, MNIST Hand-written Digits, Twitter Dataset and so on. Shapely, GeoPandas and PostgresSQL are mentioned in the projects.
 ## Project 0: Overview of Python
 * Few useful libraries.
 * Interfaces of natural language processing tool class, including word frequency calculation, character frequency calculation, and other useful tools.   
