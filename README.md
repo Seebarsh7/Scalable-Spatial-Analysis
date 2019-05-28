@@ -83,5 +83,9 @@ The first step is to calculate the covariance matrxi with mean and transpose. Re
   - A very simple and intuitive approach is simply to enforce A = (A.T + A)/2.
 * PostgresSQL (I'll skip this part.Please look at the code3 if interested.)
 ## Project 3: Clustering
-* Dynamic Time Wrapping (DTW)   
-It is named as 'dynamic' because it is using dynamic programming. 
+* [Dynamic Time Wrapping (DTW)](https://en.wikipedia.org/wiki/Dynamic_time_warping)    
+In time series analysis, dynamic time warping (DTW) is one of the algorithms for measuring similarity between two temporal sequences, which may vary in speed. For instance, similarities in walking could be detected using DTW, even if one person was walking faster than the other, or if there were accelerations and decelerations during the course of an observation.
+It is named as 'dynamic' because it is using dynamic programming. Given two trajectory objects,  one has N * d dimension, and one has M * d dimension. The dynamic time wrapping could be expressed by the following formula (how to type formula anyways???)
+It is called 'dynamic' because of *finding the minumum* part. Boundary condition needs to be considered in the looping. Please refer to Part 3 code 1 for details.
+A useful 2-d DTW example to facilitate the understanding: https://nipunbatra.github.io/blog/2014/dtw.html
+
