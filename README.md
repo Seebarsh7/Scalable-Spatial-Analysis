@@ -84,8 +84,47 @@ The first step is to calculate the covariance matrxi with mean and transpose. Re
 * PostgresSQL (I'll skip this part.Please look at the code3 if interested.)
 ## Project 3: Clustering
 * [Dynamic Time Wrapping (DTW)](https://en.wikipedia.org/wiki/Dynamic_time_warping)    
-In time series analysis, dynamic time warping (DTW) is one of the algorithms for measuring similarity between two temporal sequences, which may vary in speed. For instance, similarities in walking could be detected using DTW, even if one person was walking faster than the other, or if there were accelerations and decelerations during the course of an observation.
-It is named as 'dynamic' because it is using dynamic programming. Given two trajectory objects,  one has N * d dimension, and one has M * d dimension. The dynamic time wrapping could be expressed by the following formula (how to type formula anyways???)
-It is called 'dynamic' because of *finding the minumum* part. Boundary condition needs to be considered in the looping. Please refer to Part 3 code 1 for details.
-A useful 2-d DTW example to facilitate the understanding: https://nipunbatra.github.io/blog/2014/dtw.html
-
+In time series analysis, dynamic time warping (DTW) is one of the algorithms for measuring similarity between two temporal sequences, which may vary in speed. For instance, similarities in walking could be detected using DTW, even if one person was walking faster than the other, or if there were accelerations and decelerations during the course of an observation.    
+It is named as 'dynamic' because it is using dynamic programming. Given two trajectory objects,  one has N * d dimension, and one has M * d dimension. The dynamic time wrapping could be expressed by the following formula (how to type formula in github anyways :)    
+*gamma(i,j) = D(i,j) + min(gamma(i,j-1), gamma(i-1,j), gamma(i-1,j-1))*     
+- D(i,j) is the pairwise distance given a sequence of trajectory, which could be calculated using 2 for loops (simple idea :)))    
+```python
+for i in range(x.length):
+   for j in range(y.length):
+      D[i][j] = numpy.linalg.norm(x[i] - y[j]) #this is the 2-norm distance
+```
+Therefore in the algorithm, it is considering the boundary conditions and then do the looping. It is adding the minimum value from gamma matrix to the original distance matrix.    
+Being dynamic could be reflected from the *finding the minumum* part. Boundary condition needs to be considered in the looping. Please refer to Part 3 code 1 for details.    
+A useful 2-d DTW example to facilitate the understanding: https://nipunbatra.github.io/blog/2014/dtw.html     
+## Project 4: Travel Time Prediction - Kaggle  
+### 1.	Data Cleaning   
+The data contains 2012 Sept’s SF data and 2015 whole year’s NYC data. 
+  #### (1)	NaN Value
+  Some values are NaN in the dataset. Those are dropped.
+  #### (2)	Noise Data
+  -	A bunch of data all have duration 40000, which is needed to be dropped from the dataset.
+  -	Some of the data shows a weird speed pattern. They are dropped from the dataset as well.
+  - This is a draft of distance versus duration. Outliers could be observed. 
+  -	Speed is calculated for training set to do the data cleaning. All the speed that larger than 37 are dropped from the data set.
+### 2.	Exploratory data analysis
+#### 1)	Distance and headings calculation
+The distances are calculated as the distance between two points with the function in Assignment 2. Headings are calculated as azimuth and classified into 6 categories: N, S, NE, NW, SE, SW. They are made to dummy variables in the final model.
+#### 2)	Normalization and Performance comparison
+The duration is not normal distributed for both SF and NYC. This is the illustration from NYC data. I tried log the duration to make it normal distributed while the prediction results need to be logged back. The error could be created during the ‘np.exp()’ back part.
+#### 3)	Clustering and Neighbors
+Neighbors are found as the length of a cluster. Using kmeans, each pick up location and drop off location is assigned to the number of neighbors they have.   
+#### 4)	PCA (2d to 2d) 
+The PCA in this competition is not for the dimensional reduction. It is a 2D to 2D transformation. I find this way in NYC taxi data competition. It is good for tree growth and split according to the experiment.    
+#### 5)	Visualization
+For the visualization, we could see that the dataset size for SF is relatively small. I tried training two separate models for the two cities, but the performance is not ideal. I think it is because of the dataset size. Therefore, I add a new feature which indicates which city the point belongs to.
+**Please refer to the write-up in Project 4 for more details.**
+### 3.	Modelling
+Because of the page limitation, I only include the model. I started from neural networks which used to perform well in my past projects. However, this is not the case for this competition as the dataset and number of features is not big enough to build a deep neural network. Therefore, I turned my way to ensemble modelling and find XGBoost has the best performance.    
+#### 1)	Neural Network based on MXNet: 2-layer with one non-linear layer, bad result, around 380
+#### 2)	Ensemble Method
+-	Random Forrest: Not so good, around 320
+-	Gradient Boosting: Not enough
+-	XGBoost (chosen): 250 number of estimators and 10 max depth. Proved to be the best.
+#### 3） Concat Models (this is the amazing part :))))
+My best entries were 297 and 301, therefore I concat them together based on the final score. That is, the 297 model takes up for 301/598 and 301 model takes the other part. I make a new prediction based on the model. After the concatenation, the result is 294.    
+   
